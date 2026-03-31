@@ -1,0 +1,25 @@
+# Credentials - NEVER commit these
+arduino_secrets.h
+config.py
+.env
+secrets.h
+
+# Arduino build output
+build/
+*.bin
+*.elf
+*.hex
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+venv/
+
+# Logs
+intrusion_log.txt
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
