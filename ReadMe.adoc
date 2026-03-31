@@ -1,58 +1,108 @@
-:Author: lnz
-:Email:
+:Author: Shemmy Afolayan
+:Email: shemmy.afolayan@outlook.com
 :Date: 21/01/2025
-:Revision: version#
+:Revision: 1.0
 :License: Public Domain
 
-= Project: {Project}
+= Project: Smart Home Intrusion Detection System
 
-Describe your project
+An IoT-based security alerting system that detects motion via PIR sensor and delivers real-time notifications to a Telegram bot over a secure MQTT pipeline.
 
 == Step 1: Installation
-Please describe the steps to install this project.
 
-For example:
+=== Prerequisites
 
-1. Open this file
-2. Edit as you like
-3. Release to the World!
+Install the following Arduino libraries via the Library Manager:
 
-== Step 2: Assemble the circuit
+1. `PubSubClient` — MQTT messaging
+2. `Grove RGB LCD` — LCD display
+3. `WiFiS3` — WiFi connectivity for Arduino UNO R4
 
-Assemble the circuit following the diagram layout.png attached to the sketch
+On the Raspberry Pi, install Python dependencies:
 
-== Step 3: Load the code
+ pip install paho-mqtt requests
 
-Upload the code contained in this sketch on to your board
+=== Credentials Setup
 
-=== Folder structure
+1. Copy `arduino_secrets.h.example` to `arduino_secrets.h`
+2. Fill in your WiFi network name and password
+3. On the Raspberry Pi, set your Telegram credentials as environment variables:
+
+ export BOT_TOKEN="your_telegram_bot_token"
+ export CHAT_ID="your_chat_id"
+
+NOTE: Never commit `arduino_secrets.h` to version control. It is listed in `.gitignore`.
+
+== Step 2: Assemble the Circuit
+
+Connect components to the Arduino UNO R4 WiFi as follows:
+
+|===
+| Component | Pin
+
+| PIR Motion Sensor | D2
+| Buzzer | D3
+| LED Button | D5
+| Grove RGB LCD | I2C (SDA/SCL)
+|===
+
+Refer to the circuit diagram in the project documentation for full wiring layout.
+
+== Step 3: Load the Code
+
+1. Open `Intrusion_Detection__jan23a.ino` in Arduino IDE
+2. Ensure `arduino_secrets.h` is in the same folder with your credentials filled in
+3. Select board: *Arduino UNO R4 WiFi*
+4. Upload to the board
+
+Run the Raspberry Pi subscriber script:
+
+ python3 mqtt_subscriber.py
+
+=== How It Works
+
+* PIR sensor detects motion and sends signal to Arduino
+* Arduino triggers buzzer, LED, and LCD alert, then publishes MQTT message
+* Raspberry Pi receives MQTT message and forwards it to Telegram bot
+* Alert delivered to phone in real-time
+* System auto-resets to secure state after 10 seconds of no motion
+
+=== Folder Structure
 
 ....
- sketch123                => Arduino sketch folder
-  ├── sketch123.ino       => main Arduino file
-  ├── schematics.png      => (optional) an image of the required schematics
-  ├── layout.png          => (optional) an image of the layout
-  └── ReadMe.adoc         => this file
+Home-Intrusion-Detection/
+  ├── Intrusion_Detection__jan23a.ino   => Main Arduino sketch
+  ├── arduino_secrets.h.example         => Credentials template (safe to commit)
+  ├── arduino_secrets.h                 => Your credentials (gitignored)
+  ├── thingProperties.h                 => Arduino IoT Cloud config
+  ├── mqtt_subscriber.py                => Raspberry Pi MQTT + Telegram script
+  ├── .gitignore                        => Excludes secrets from version control
+  ├── README.md                         => Project overview
+  └── ReadMe.adoc                       => This file
 ....
+
+=== Bill of Materials
+
+|===
+| ID | Part Name | Specification | Quantity
+
+| A1 | Arduino UNO R4 WiFi | ABX00087 | 1
+| A2 | Raspberry Pi | Any model with WiFi | 1
+| S1 | PIR Motion Sensor | HC-SR501 | 1
+| D1 | Grove RGB LCD | 16x2 | 1
+| B1 | Buzzer | 5V Active Buzzer | 1
+| L1 | LED Button | Any colour | 1
+|===
 
 === License
-This project is released under a {License} License.
+
+This project is released under a Public Domain License.
 
 === Contributing
-To contribute to this project please contact: 
 
-=== BOM
-Add the bill of the materials you need for this project.
+To contribute to this project please contact: shemmy.afolayan@outlook.com
 
-|===
-| ID | Part name      | Part number | Quantity
-| R1 | 10k Resistor   | 1234-abcd   | 10       
-| L1 | Red LED        | 2345-asdf   | 5        
-| A1 | Arduino Zero   | ABX00066    | 1        
-|===
+=== Author
 
-
-=== Help
-This document is written in the _AsciiDoc_ format, a markup language to describe documents. 
-If you need help you can search the http://www.methods.co.nz/asciidoc[AsciiDoc homepage]
-or consult the http://powerman.name/doc/asciidoc[AsciiDoc cheatsheet]
+Shemmy Afolayan — BSc Cyber Security (First Class), York St John University +
+LinkedIn: https://linkedin.com/in/shemmy-afolayan
