@@ -4,10 +4,10 @@
 #include "rgb_lcd.h"
 #include <PubSubClient.h>  
 
-const char* ssid = "VM2233583";  
-const char* password = "Jr3nttcntSrd";  
+const char* ssid = "your ssid";  
+const char* password = "your-passwd";  
 const char* mqtt_server = "test.mosquitto.org";  
-const char* mqtt_topic = "security/intrusion_detection";
+const char* mqtt_topic = "s****************n";
 
 #define PIR_SENSOR 2  // PIR Motion Sensor on D2
 #define BUZZER 3  // Buzzer on D3
